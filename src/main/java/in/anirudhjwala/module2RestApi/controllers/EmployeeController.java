@@ -19,7 +19,7 @@ public class EmployeeController {
         return new EmployeeDTO(employeeId, "Anirudh", "hi@anirudhjwala.in", 25, LocalDate.of(2021, 3, 4),true);
     }
 
-    @GetMapping(path = "/")
+    @GetMapping
     public String getEmployees(
             @RequestParam(required = false) Integer age,
             @RequestParam(required = false) String sortBy
