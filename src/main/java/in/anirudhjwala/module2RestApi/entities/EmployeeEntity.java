@@ -1,5 +1,6 @@
 package in.anirudhjwala.module2RestApi.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +16,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "employees")
 public class EmployeeEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,6 +28,6 @@ public class EmployeeEntity {
 
     private LocalDate dateOfJoining;
 
+    @JsonProperty("isActive")
     private boolean active;
-
 }
