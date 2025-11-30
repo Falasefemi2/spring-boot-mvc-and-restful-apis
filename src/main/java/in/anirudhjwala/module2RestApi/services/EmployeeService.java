@@ -2,6 +2,7 @@ package in.anirudhjwala.module2RestApi.services;
 
 import in.anirudhjwala.module2RestApi.dto.EmployeeDTO;
 import in.anirudhjwala.module2RestApi.entities.EmployeeEntity;
+import in.anirudhjwala.module2RestApi.exceptions.ResourceNotFoundException;
 import in.anirudhjwala.module2RestApi.repositories.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,8 @@ public class EmployeeService {
     }
 
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
+        isExistsByEmployeeId(employeeId);
+
         EmployeeEntity employeeEntity = modelMapper.map(employeeDTO, EmployeeEntity.class);
         employeeEntity.setId(employeeId);
 
@@ -53,27 +56,23 @@ public class EmployeeService {
         return modelMapper.map(savedEmployeeEntity, EmployeeDTO.class);
     }
 
-    public boolean isExistsByEmployeeId(Long employeeId) {
-        return employeeRepository.existsById(employeeId);
+    public void isExistsByEmployeeId(Long employeeId) {
+        boolean exists = employeeRepository.existsById(employeeId);
+
+        if (!exists) {
+            throw new ResourceNotFoundException("Employee not found with id: " + employeeId);
+        }
     }
 
     public boolean deleteEmployeeById(Long employeeId) {
-        boolean existsById = isExistsByEmployeeId(employeeId);
-
-        if (!existsById) {
-            return false;
-        }
+        isExistsByEmployeeId(employeeId);
 
         employeeRepository.deleteById(employeeId);
         return true;
     }
 
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> employeeUpdates) {
-        boolean existsById = isExistsByEmployeeId(employeeId);
-
-        if (!existsById) {
-            return null;
-        }
+        isExistsByEmployeeId(employeeId);
 
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
         employeeUpdates.forEach((field, value) -> {

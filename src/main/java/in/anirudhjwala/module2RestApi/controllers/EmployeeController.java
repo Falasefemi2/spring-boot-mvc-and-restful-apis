@@ -1,6 +1,7 @@
 package in.anirudhjwala.module2RestApi.controllers;
 
 import in.anirudhjwala.module2RestApi.dto.EmployeeDTO;
+import in.anirudhjwala.module2RestApi.exceptions.ResourceNotFoundException;
 import in.anirudhjwala.module2RestApi.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -61,9 +62,7 @@ public class EmployeeController {
 
        return employeeDTO
                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-               .orElse(
-                       ResponseEntity.notFound().build()
-               );
+               .orElseThrow(() -> new ResourceNotFoundException("Employee with id " + employeeId + " not found"));
     }
 
     @GetMapping
@@ -78,7 +77,7 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody EmployeeDTO employeeDTO, @PathVariable Long employeeId) {
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO, @PathVariable Long employeeId) {
         return ResponseEntity.ok(
                 employeeService.updateEmployeeById(employeeId, employeeDTO)
         );
