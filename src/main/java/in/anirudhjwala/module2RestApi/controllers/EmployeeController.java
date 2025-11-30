@@ -1,8 +1,8 @@
 package in.anirudhjwala.module2RestApi.controllers;
 
 import in.anirudhjwala.module2RestApi.dto.EmployeeDTO;
-import in.anirudhjwala.module2RestApi.entities.EmployeeEntity;
 import in.anirudhjwala.module2RestApi.services.EmployeeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +29,11 @@ public class EmployeeController {
 
     @GetMapping(path = "/static/{employeeId}")
     public EmployeeDTO getStaticEmployeeById(@PathVariable Long employeeId) {
-        return new EmployeeDTO(employeeId, "Anirudh", "hi@anirudhjwala.in", 25, LocalDate.of(2021, 3, 4),true);
+        return new EmployeeDTO(
+                employeeId, "Anirudh", "hi@anirudhjwala.in",
+                25, "USER", 25000.00,
+                LocalDate.of(2021, 3, 4),true
+        );
     }
 
     @GetMapping(path = "/static")
@@ -68,7 +72,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody EmployeeEntity inputEmployee) {
+    public ResponseEntity<EmployeeDTO> createNewEmployee(@RequestBody @Valid EmployeeDTO inputEmployee) {
         EmployeeDTO savedEmployee = employeeService.createNewEmployee(inputEmployee);
         return new ResponseEntity<>(savedEmployee, HttpStatus.CREATED);
     }
