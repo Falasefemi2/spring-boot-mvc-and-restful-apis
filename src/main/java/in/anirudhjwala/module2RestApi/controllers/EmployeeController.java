@@ -1,17 +1,27 @@
 package in.anirudhjwala.module2RestApi.controllers;
 
-import in.anirudhjwala.module2RestApi.dto.EmployeeDTO;
-import in.anirudhjwala.module2RestApi.exceptions.ResourceNotFoundException;
-import in.anirudhjwala.module2RestApi.services.EmployeeService;
-import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import in.anirudhjwala.module2RestApi.dto.EmployeeDTO;
+import in.anirudhjwala.module2RestApi.exceptions.ResourceNotFoundException;
+import in.anirudhjwala.module2RestApi.services.EmployeeService;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/employees")
@@ -33,15 +43,13 @@ public class EmployeeController {
         return new EmployeeDTO(
                 employeeId, "Anirudh", "hi@anirudhjwala.in",
                 25, "USER", 25000.00,
-                LocalDate.of(2021, 3, 4),true
-        );
+                LocalDate.of(2021, 3, 4), true);
     }
 
     @GetMapping(path = "/static")
     public String getAllStaticEmployees(
             @RequestParam(required = false) Integer age,
-            @RequestParam(required = false) String sortBy
-    ) {
+            @RequestParam(required = false) String sortBy) {
         return "Employee age :: " + age + " sort by :: " + sortBy;
     }
 
@@ -60,9 +68,9 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable Long employeeId) {
         Optional<EmployeeDTO> employeeDTO = employeeService.getEmployeeById(employeeId);
 
-       return employeeDTO
-               .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
-               .orElseThrow(() -> new ResourceNotFoundException("Employee with id " + employeeId + " not found"));
+        return employeeDTO
+                .map(employeeDTO1 -> ResponseEntity.ok(employeeDTO1))
+                .orElseThrow(() -> new ResourceNotFoundException("Employee with id " + employeeId + " not found"));
     }
 
     @GetMapping
@@ -77,10 +85,10 @@ public class EmployeeController {
     }
 
     @PutMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO, @PathVariable Long employeeId) {
+    public ResponseEntity<EmployeeDTO> updateEmployeeById(@RequestBody @Valid EmployeeDTO employeeDTO,
+            @PathVariable Long employeeId) {
         return ResponseEntity.ok(
-                employeeService.updateEmployeeById(employeeId, employeeDTO)
-        );
+                employeeService.updateEmployeeById(employeeId, employeeDTO));
     }
 
     @DeleteMapping(path = "/{employeeId}")
@@ -95,10 +103,11 @@ public class EmployeeController {
     }
 
     @PatchMapping(path = "/{employeeId}")
-    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@RequestBody Map<String, Object> employeeUpdates, @PathVariable Long employeeId) {
+    public ResponseEntity<EmployeeDTO> updatePartialEmployeeById(@RequestBody Map<String, Object> employeeUpdates,
+            @PathVariable Long employeeId) {
         EmployeeDTO employeeDTO = employeeService.updatePartialEmployeeById(employeeId, employeeUpdates);
 
-        if  (employeeDTO == null) {
+        if (employeeDTO == null) {
             return ResponseEntity.notFound().build();
         }
 

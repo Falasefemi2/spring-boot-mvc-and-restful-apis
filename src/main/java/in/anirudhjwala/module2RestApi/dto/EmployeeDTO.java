@@ -1,14 +1,26 @@
 package in.anirudhjwala.module2RestApi.dto;
 
+import java.time.LocalDate;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import in.anirudhjwala.module2RestApi.annotations.EmployeeRoleValidation;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 // POJO Class
 @Getter
@@ -18,8 +30,10 @@ import java.time.LocalDate;
 public class EmployeeDTO {
     private long id;
 
-    // @NotNull(message = "Required field in employee: name") --> checks for presence of field
-    // @NotEmpty(message = "Name of the employee cannot be empty") --> checks for not null and length > 0
+    // @NotNull(message = "Required field in employee: name") --> checks for
+    // presence of field
+    // @NotEmpty(message = "Name of the employee cannot be empty") --> checks for
+    // not null and length > 0
     @NotBlank(message = "Name of the employee cannot be blank") // checks for not null and trimmed length > 0
     @Size(min = 3, max = 10, message = "Number of characters in name should be in the range: [3, 10]")
     private String name;
@@ -33,7 +47,8 @@ public class EmployeeDTO {
     @Min(value = 18, message = "Age of Employee cannot be less than 18")
     private Integer age;
 
-    // @Pattern(regexp = "^(ADMIN|USER)$", message = "Role of Employee can be USER or ADMIN")
+    // @Pattern(regexp = "^(ADMIN|USER)$", message = "Role of Employee can be USER
+    // or ADMIN")
     @NotBlank(message = "Role of the employee cannot be blank")
     @EmployeeRoleValidation
     private String role; // ADMIN, USER
